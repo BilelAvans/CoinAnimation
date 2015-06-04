@@ -13,13 +13,12 @@ import java.io.IOException;
  */
 public class CoinAnimation extends Rectangle2D.Double {
 
-    // CoinAnimatie.
     // Gewoon 'paint(Graphics2D) aanroepen, dan wordt automatisch ook de update ook verwerkt.
 
     // Deze klasse extends Rectangle2D, de container van de munt zelf
-    private BufferedImage coinImage, coinImageLatency;
-    private TexturePaint paint, paintLatency;
-    private Rectangle2D.Double coinContainer, coinContainerLatency;
+    private BufferedImage coinImage;
+    private TexturePaint paint, paintLatency, paintLatency2;
+    private Rectangle2D.Double coinContainer, coinContainerLatency, coinContainerLatency2;
     private Point2D.Double coinSetPoint;
 
     // Animatie Timer
@@ -35,6 +34,8 @@ public class CoinAnimation extends Rectangle2D.Double {
         g2.fill(coinContainer);
         g2.setPaint(paintLatency);
         g2.fill(coinContainerLatency);
+        g2.setPaint(paintLatency2);
+        g2.fill(coinContainerLatency2);
 
         update();
     }
@@ -48,20 +49,23 @@ public class CoinAnimation extends Rectangle2D.Double {
 
         coinContainerLatency.setFrame(coinSetPoint.getX(), (coinImage.getWidth() + 10) - (coinSetPoint.getY() % coinImage.getWidth()),
                 coinImage.getWidth(), coinImage.getHeight());
-
+        coinContainerLatency2.setFrame(coinSetPoint.getX(), (coinImage.getWidth() + 20) - (coinSetPoint.getY() % coinImage.getWidth()),
+                coinImage.getWidth(), coinImage.getHeight());
         // Opnieuw samenvoegen
         paint = new TexturePaint(coinImage, coinContainer);
-        paintLatency = new TexturePaint(coinImageLatency, coinContainerLatency);
+        paintLatency = new TexturePaint(coinImage, coinContainerLatency);
+        paintLatency2 = new TexturePaint(coinImage, coinContainerLatency2);
     }
 
     // Coin opzetten
     public void initCoins() {
         try {
             coinImage        = ImageIO.read(getClass().getResource("Coin.png"));
-            coinImageLatency = ImageIO.read(getClass().getResource("Coin.png"));
             coinContainer = new Rectangle2D.Double(coinSetPoint.getX(), coinSetPoint.getY(), coinImage.getWidth(), coinImage.getHeight());
             coinContainerLatency = new Rectangle2D.Double(coinSetPoint.getX(), coinSetPoint.getY() + 10,
-                                                          coinImageLatency.getWidth(), coinImageLatency.getHeight());
+                                                          coinImage.getWidth(), coinImage.getHeight());
+            coinContainerLatency2 = new Rectangle2D.Double(coinSetPoint.getX(), coinSetPoint.getY() + 20,
+                    coinImage.getWidth(), coinImage.getHeight());
             paint = new TexturePaint(coinImage, new Rectangle2D.Double(0, 0, coinImage.getWidth(), coinImage.getHeight()));
         } catch (IOException i) {
         }
